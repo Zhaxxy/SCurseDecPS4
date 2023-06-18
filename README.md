@@ -17,7 +17,11 @@ options:
                         output save file
 ```
 ## example
+Dccompress the save
 ```
 python SCurseDecPS4.py -d -i savegame -o output.bin
+```
+Recompress the save
+```
 python SCurseDecPS4.py -c -i output.bin -o savegame
 ```
