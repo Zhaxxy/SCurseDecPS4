@@ -1,5 +1,5 @@
 # SCurseDecPS4
-Simple command line tool to decompress and recompress savegame for Shantae and the Pirate's Curse on the PS4, along side generating the correct hash
+Simple command line tool to decompress and recompress savegame for Shantae and the Pirate's Curse on the PS4 and PC, along side generating the correct hash
 
 # Usage
 ```
