@@ -1,7 +1,7 @@
 import struct
 import zlib
 
-def uint32(value: int, /):
+def uint32(value: int, /) -> int:
     return value & 0xFFFFFFFF
 
 
