@@ -5,7 +5,7 @@ def uint32(value: int, /) -> int:
     return value & 0xFFFFFFFF
 
 
-def some_hash_function(raw_data: bytes, /):
+def scurse_hash(raw_data: bytes, /):
     """
     thx to https://github.com/algmyr/ alot for helping making this function
     if you can recongise the hash aloghorthim and have a better python implemention let me know!, 
@@ -84,7 +84,7 @@ def check_save(save_bytes: bytes, /):
     SOMEMAGICVALUE = 1224793212
     og_hash = struct.unpack("<I", save_bytes[:4])[0]
 
-    return uint32(some_hash_function(save_bytes[4:]) + SOMEMAGICVALUE) == og_hash
+    return uint32(scurse_hash(save_bytes[4:]) + SOMEMAGICVALUE) == og_hash
 
 
 def decode_save(save_bytes: bytes, /, check_the_save: bool = True) -> bytes:
@@ -106,7 +106,7 @@ def encode_save(decompressed_save_bytes: bytes, /):
     
     new_save = zlib.compress(decompressed_save_bytes,wbits=WBITS)
     
-    new_hash = struct.pack("<I",uint32(some_hash_function(new_save) + SOMEMAGICVALUE))
+    new_hash = struct.pack("<I",uint32(scurse_hash(new_save) + SOMEMAGICVALUE))
     return new_hash + new_save
     
     
