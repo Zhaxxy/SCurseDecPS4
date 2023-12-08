@@ -1,83 +1,79 @@
 import struct
 import zlib
 
-def uint32(value: int, /) -> int:
-    return value & 0xFFFFFFFF
 
-
-def scurse_hash(raw_data: bytes, /):
+def scurse_hash(raw_data: bytes, /) -> int:
     """
     thx to https://github.com/algmyr/ alot for helping making this function
     if you can recongise the hash aloghorthim and have a better python implemention let me know!, 
     its likley to be part of jenkins hash functions https://en.wikipedia.org/wiki/Jenkins_hash_function
     """
-    byte_length = uint32(len(raw_data))
+    byte_length = (len(raw_data)) & 0xFFFFFFFF
 
-    golden_ratio1 = uint32(0x9E3779B9)
-    uVar4 = uint32(0x9E3779B9)
-    uVar6 = uint32(0)
-    uVar7 = uint32(byte_length)
+    golden_ratio1 = (0x9E3779B9) & 0xFFFFFFFF
+    uVar4 = (0x9E3779B9) & 0xFFFFFFFF
+    uVar6 = (0) & 0xFFFFFFFF
+    uVar7 = (byte_length) & 0xFFFFFFFF
 
     if byte_length >= 12:
         while uVar7 > 11:
             uVar7 -= 12  # 12 byte chunks
 
-            i0 = uint32(struct.unpack("<I", raw_data[:4])[0])
-            i1 = uint32(struct.unpack("<I", raw_data[4:8])[0])
-            i2 = uint32(struct.unpack("<I", raw_data[8:12])[0])
+            i0 = (struct.unpack("<I", raw_data[:4])[0]) & 0xFFFFFFFF
+            i1 = (struct.unpack("<I", raw_data[4:8])[0]) & 0xFFFFFFFF
+            i2 = (struct.unpack("<I", raw_data[8:12])[0]) & 0xFFFFFFFF
 
             raw_data = raw_data[12:]
 
-            uVar6 = uint32(i2 + uVar6)
+            uVar6 = (i2 + uVar6) & 0xFFFFFFFF
 
-            uVar4 = uint32(uVar6 >> 13 ^ ((i0 + uVar4) - (i1 + golden_ratio1)) - uVar6)
-            golden_ratio1 = uint32(uVar4 << 8 ^ ((i1 + golden_ratio1) - uVar6) - uVar4)
-            uVar5 = uint32(golden_ratio1 >> 13 ^ (uVar6 - uVar4) - golden_ratio1)
-            uVar4 = uint32(uVar5 >> 12 ^ (uVar4 - golden_ratio1) - uVar5)
-            uVar6 = uint32(uVar4 << 16 ^ (golden_ratio1 - uVar5) - uVar4)
-            uVar5 = uint32(uVar6 >> 5 ^ (uVar5 - uVar4) - uVar6)
-            uVar4 = uint32(uVar5 >> 3 ^ (uVar4 - uVar6) - uVar5)
-            golden_ratio1 = uint32(uVar4 << 10 ^ (uVar6 - uVar5) - uVar4)
-            uVar6 = uint32(golden_ratio1 >> 15 ^ (uVar5 - uVar4) - golden_ratio1)
+            uVar4 = (uVar6 >> 13 ^ ((i0 + uVar4) - (i1 + golden_ratio1)) - uVar6) & 0xFFFFFFFF
+            golden_ratio1 = (uVar4 << 8 ^ ((i1 + golden_ratio1) - uVar6) - uVar4) & 0xFFFFFFFF
+            uVar5 = (golden_ratio1 >> 13 ^ (uVar6 - uVar4) - golden_ratio1) & 0xFFFFFFFF
+            uVar4 = (uVar5 >> 12 ^ (uVar4 - golden_ratio1) - uVar5) & 0xFFFFFFFF
+            uVar6 = (uVar4 << 16 ^ (golden_ratio1 - uVar5) - uVar4) & 0xFFFFFFFF
+            uVar5 = (uVar6 >> 5 ^ (uVar5 - uVar4) - uVar6) & 0xFFFFFFFF
+            uVar4 = (uVar5 >> 3 ^ (uVar4 - uVar6) - uVar5) & 0xFFFFFFFF
+            golden_ratio1 = (uVar4 << 10 ^ (uVar6 - uVar5) - uVar4) & 0xFFFFFFFF
+            uVar6 = (golden_ratio1 >> 15 ^ (uVar5 - uVar4) - golden_ratio1) & 0xFFFFFFFF
 
-        uVar7 = uint32((byte_length - 12) % 12)
+        uVar7 = ((byte_length - 12) % 12) & 0xFFFFFFFF
 
-    uVar6 = uint32(byte_length + uVar6)
+    uVar6 = (byte_length + uVar6) & 0xFFFFFFFF
 
     if uVar7 == 11:
-        uVar6 = uint32(raw_data[10] * 0x1000000 + uVar6)
+        uVar6 = (raw_data[10] * 0x1000000 + uVar6) & 0xFFFFFFFF
     if uVar7 >= 10:
-        uVar6 = uint32(raw_data[9] * 0x10000 + uVar6)
+        uVar6 = (raw_data[9] * 0x10000 + uVar6) & 0xFFFFFFFF
     if uVar7 >= 9:
-        uVar6 = uint32(raw_data[8] * 0x100 + uVar6)
+        uVar6 = (raw_data[8] * 0x100 + uVar6) & 0xFFFFFFFF
     if uVar7 >= 8:
-        golden_ratio1 = uint32(golden_ratio1 + raw_data[7] * 0x1000000)
+        golden_ratio1 = (golden_ratio1 + raw_data[7] * 0x1000000) & 0xFFFFFFFF
     if uVar7 >= 7:
-        golden_ratio1 = uint32(golden_ratio1 + raw_data[6] * 0x10000)
+        golden_ratio1 = (golden_ratio1 + raw_data[6] * 0x10000) & 0xFFFFFFFF
     if uVar7 >= 6:
-        golden_ratio1 = uint32(golden_ratio1 + raw_data[5] * 0x100)
+        golden_ratio1 = (golden_ratio1 + raw_data[5] * 0x100) & 0xFFFFFFFF
     if uVar7 >= 5:
-        golden_ratio1 = uint32(golden_ratio1 + raw_data[4])
+        golden_ratio1 = (golden_ratio1 + raw_data[4]) & 0xFFFFFFFF
     if uVar7 >= 4:
-        uVar4 = uint32(uVar4 + raw_data[3] * 0x1000000)
+        uVar4 = (uVar4 + raw_data[3] * 0x1000000) & 0xFFFFFFFF
     if uVar7 >= 3:
-        uVar4 = uint32(uVar4 + raw_data[2] * 0x10000)
+        uVar4 = (uVar4 + raw_data[2] * 0x10000) & 0xFFFFFFFF
     if uVar7 >= 2:
-        uVar4 = uint32(uVar4 + raw_data[1] * 0x100)
+        uVar4 = (uVar4 + raw_data[1] * 0x100) & 0xFFFFFFFF
     if uVar7 >= 1:
-        uVar4 = uint32(uVar4 + raw_data[0])
+        uVar4 = (uVar4 + raw_data[0]) & 0xFFFFFFFF
 
-    uVar4 = uint32(uVar6 >> 13 ^ (uVar4 - golden_ratio1) - uVar6)
-    golden_ratio1 = uint32(uVar4 << 8 ^ (golden_ratio1 - uVar6) - uVar4)
-    uVar6 = uint32((golden_ratio1) >> 13 ^ ((uVar6) - (uVar4)) - (golden_ratio1))
-    uVar5 = uint32(uVar6 >> 12 ^ (uVar4 - golden_ratio1) - uVar6)
-    golden_ratio1 = uint32(uVar5 << 16 ^ (golden_ratio1 - uVar6) - uVar5)
-    uVar4 = uint32(golden_ratio1 >> 5 ^ (uVar6 - uVar5) - golden_ratio1)
-    uVar6 = uint32(uVar4 >> 3 ^ (uVar5 - golden_ratio1) - uVar4)
-    golden_ratio1 = uint32(uVar6 << 10 ^ (golden_ratio1 - uVar4) - uVar6)
+    uVar4 = (uVar6 >> 13 ^ (uVar4 - golden_ratio1) - uVar6) & 0xFFFFFFFF
+    golden_ratio1 = (uVar4 << 8 ^ (golden_ratio1 - uVar6) - uVar4) & 0xFFFFFFFF
+    uVar6 = ((golden_ratio1) >> 13 ^ ((uVar6) - (uVar4)) - (golden_ratio1)) & 0xFFFFFFFF
+    uVar5 = (uVar6 >> 12 ^ (uVar4 - golden_ratio1) - uVar6) & 0xFFFFFFFF
+    golden_ratio1 = (uVar5 << 16 ^ (golden_ratio1 - uVar6) - uVar5) & 0xFFFFFFFF
+    uVar4 = (golden_ratio1 >> 5 ^ (uVar6 - uVar5) - golden_ratio1) & 0xFFFFFFFF
+    uVar6 = (uVar4 >> 3 ^ (uVar5 - golden_ratio1) - uVar4) & 0xFFFFFFFF
+    golden_ratio1 = (uVar6 << 10 ^ (golden_ratio1 - uVar4) - uVar6) & 0xFFFFFFFF
 
-    result = uint32(golden_ratio1 >> 15 ^ (uVar4 - uVar6) - golden_ratio1)
-    return result
+    return (golden_ratio1 >> 15 ^ (uVar4 - uVar6) - golden_ratio1) & 0xFFFFFFFF
 
 
 def check_save(save_bytes: bytes, /):
