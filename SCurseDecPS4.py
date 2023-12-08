@@ -80,7 +80,7 @@ def check_save(save_bytes: bytes, /):
     SOMEMAGICVALUE = 1224793212
     og_hash = struct.unpack("<I", save_bytes[:4])[0]
 
-    return uint32(scurse_hash(save_bytes[4:]) + SOMEMAGICVALUE) == og_hash
+    return ((scurse_hash(save_bytes[4:]) + SOMEMAGICVALUE) & 0xFFFFFFFF) == og_hash
 
 
 def decode_save(save_bytes: bytes, /, check_the_save: bool = True) -> bytes:
@@ -102,7 +102,7 @@ def encode_save(decompressed_save_bytes: bytes, /):
     
     new_save = zlib.compress(decompressed_save_bytes,wbits=WBITS)
     
-    new_hash = struct.pack("<I",uint32(scurse_hash(new_save) + SOMEMAGICVALUE))
+    new_hash = struct.pack("<I",(scurse_hash(new_save) + SOMEMAGICVALUE) & 0xFFFFFFFF)
     return new_hash + new_save
     
     
