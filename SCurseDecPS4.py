@@ -76,7 +76,7 @@ def scurse_hash(raw_data: bytes, /) -> int:
     return (golden_ratio1 >> 15 ^ (uVar4 - uVar6) - golden_ratio1) & 0xFFFFFFFF
 
 
-def check_save(save_bytes: bytes, /):
+def check_save(save_bytes: bytes, /) -> bool:
     SOMEMAGICVALUE = 1224793212
     og_hash = struct.unpack("<I", save_bytes[:4])[0]
 
@@ -91,7 +91,7 @@ def decode_save(save_bytes: bytes, /, check_the_save: bool = True) -> bytes:
     return zlib.decompress(save_bytes[4:],wbits=WBITS)
 
 
-def encode_save(decompressed_save_bytes: bytes, /):
+def encode_save(decompressed_save_bytes: bytes, /) -> bytes:
     WBITS = -15
     SOMEMAGICVALUE = 1224793212
     
